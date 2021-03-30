@@ -1,21 +1,73 @@
 // GET REQUEST
 function getTodos() {
-  console.log('GET Request');
+  // axios use to connect with backend
+ /* axios({
+    method: 'get',
+    url: 'https://jsonplaceholder.typicode.com/todos',
+    params: { // it use to pass parameters
+      _limit: 5 // it used to limit the data by giving first five values only
+    }
+  })
+  .then(res => showOutput(res)) 
+  .catch(err => console.log(err)); // it work like a try and catch but we can also use await.
+  */
+
+  // we can also write above code in shorter way
+
+  axios.get('https://jsonplaceholder.typicode.com/todos',{ params: { _limit: 5 }})
+  .then(res => showOutput(res)) 
+  .catch(err => console.log(err));
 }
 
 // POST REQUEST
 function addTodo() {
-  console.log('POST Request');
+ /* axios({
+    method: 'post',
+    url: 'https://jsonplaceholder.typicode.com/todos',
+    data: { // this data will shown on the post request site
+      title: 'new todo',
+      completed: false
+    }
+  })
+  .then(res => showOutput(res)) // it also gives that id
+  .catch(err => console.log(err)); */
+
+  // we can write the above code in shorter way
+
+  axios.post('https://jsonplaceholder.typicode.com/todos',data= {
+    title: 'new todo',
+    completed: false
+  })
+  .then(res => showOutput(res))
+  .catch(err => console.log(err));
 }
 
 // PUT/PATCH REQUEST
+
+
 function updateTodo() {
-  console.log('PUT/PATCH Request');
+  // put is used to remove the previous and add the new one we  also have to pass /id like /1 passed bellow
+  axios.put('https://jsonplaceholder.typicode.com/todos/1', {
+  title: 'new todo added',
+  completed: true
+  })
+  .then(res => showOutput(res))
+  .catch(err => console.log(err));
+
+  //patch is similar like put but update or overrides
+  axios.patch('https://jsonplaceholder.typicode.com/todos/2', {
+  title: 'new todo updated by patch',
+  completed: true
+  })
+  .then(res => showOutput(res))
+  .catch(err => console.log(err));
 }
 
 // DELETE REQUEST
 function removeTodo() {
-  console.log('DELETE Request');
+  axios.delete('https://jsonplaceholder.typicode.com/todos/2')
+    .then(res => showOutput(res))
+    .catch(err => console.log(err));
 }
 
 // SIMULTANEOUS DATA
