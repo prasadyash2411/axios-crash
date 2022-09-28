@@ -39,6 +39,7 @@ function getTodos() {
 
 // POST REQUEST
 function addTodo() {
+  /*
   axios({
     method: "post",
     url: "https://jsonplaceholder.typicode.com/todos",
@@ -49,17 +50,45 @@ function addTodo() {
   })
     .then((res) => showOutput(res))
     .catch((error) => console.log(error));
+    */
+
+  axios
+    .post("https://jsonplaceholder.typicode.com/todos", {
+      title: "New Todo",
+      completed: false,
+    })
+    .then((res) => showOutput(res))
+    .catch((error) => console.log(error));
   // console.log("POST Request");
 }
 
 // PUT/PATCH REQUEST
 function updateTodo() {
-  console.log("PUT/PATCH Request");
+  // put replace whole obj
+  // axios
+  //   .put("https://jsonplaceholder.typicode.com/todos/1", {
+  //     title: "Updated  Todo",
+  //     completed: true,
+  //   })
+  //   .then((res) => showOutput(res))
+  //   .catch((error) => console.log(error));
+
+  //patch just modify existing data or add new if needed
+  axios
+    .patch("https://jsonplaceholder.typicode.com/todos/1", {
+      title: "Updated  Todo",
+      completed: true,
+    })
+    .then((res) => showOutput(res))
+    .catch((error) => console.log(error));
 }
 
 // DELETE REQUEST
 function removeTodo() {
-  console.log("DELETE Request");
+  axios
+    .delete("https://jsonplaceholder.typicode.com/todos/1")
+    .then((res) => showOutput(res))
+    .catch((error) => console.log(error));
 }
 
 // SIMULTANEOUS DATA
