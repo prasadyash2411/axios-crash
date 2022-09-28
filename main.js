@@ -1,5 +1,6 @@
 // GET REQUEST
-function getTodos() {
+
+async function getTodos() {
   // axios({
   //   method: "get",
   //   url: "https://jsonplaceholder.typicode.com/todos?_limit=5",
@@ -29,10 +30,17 @@ function getTodos() {
   //   .catch((error) => console.log(error));
 
   //way 4
-  axios
-    .get("https://jsonplaceholder.typicode.com/todos?_limit=5")
-    .then((res) => showOutput(res))
-    .catch((error) => console.log(error));
+  // axios
+  //   .get("https://jsonplaceholder.typicode.com/todos?_limit=5")
+  //   .then((res) => showOutput(res))
+  //   .catch((error) => console.log(error));
+  try {
+    console.log("inside get todos");
+    let res = await axios.get("https://jsonplaceholder.typicode.com/todos?");
+    showOutput(res);
+  } catch (err) {
+    console.log(err);
+  }
 
   // console.log('GET Request');
 }
@@ -152,7 +160,9 @@ function cancelToken() {
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
-
+// axios.interceptors.request.use((config) => {
+//   console.log();
+// });
 
 // AXIOS INSTANCES
 
