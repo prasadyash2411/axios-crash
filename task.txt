@@ -1,0 +1,26 @@
+Why do we need headers any idea?
+
+    when we want to send something when you make request from FE to BE;
+
+
+axios.post(url,{ }) 
+// url , body , methodtype
+
+ex - contenttype :application/json
+
+
+What is axios?
+    axios is alternative to js inbuild fetch method used to communicate between Front end and backend 
+
+axios.post('url',{ })
+
+url --> baseurl --> flipkart.com/getproduct  
+                                /sellproduct
+
+
+url --> baseurl/route
+
+
+What are the common problems faced when you make network calls and what should you do to solve it.
+    problem 1 in code identified using natwork tab can be fixed easily in code
+    problem 2 in endpoint or server itself identify using tool like postman like problem in api or problem in server itself
