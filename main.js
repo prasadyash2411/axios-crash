@@ -190,12 +190,41 @@ function transformResponse() {
 
 // ERROR HANDLING
 function errorHandling() {
-  console.log("Error Handling");
+  axios
+    .get("https://jsonplaceholder.typicode.com/todoss")
+    .then((res) => showOutput(res))
+    .catch((err) => {
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      } else if (err.request) {
+        // request is made but no response
+        console.error(err.request);
+      } else {
+        console.error(err.message);
+      }
+    });
 }
 
 // CANCEL TOKEN
 function cancelToken() {
-  console.log("Cancel Token");
+  const source = axios.CancelToken.source();
+
+  axios
+    .get("https://jsonplaceholder.typicode.com/todos", {
+      cancelToken: source.token,
+    })
+    .then((res) => showOutput(res))
+    .catch((thrown) => {
+      if (axios.isCancel(thrown)) {
+        console.log("Request canceled", thrown.message);
+      }
+    });
+
+  if (true) {
+    source.cancel("Request Canceled !!");
+  }
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
@@ -214,6 +243,12 @@ axios.interceptors.request.use(
 );
 
 // AXIOS INSTANCES
+const axiosInstances = axios.create({
+  //other custom settings
+  baseURL: "https://jsonplaceholder.typicode.com",
+});
+
+// axiosInstances.get("/comments").then((res) => showOutput(res));
 
 // Show output in browser
 function showOutput(res) {
