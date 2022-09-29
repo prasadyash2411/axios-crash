@@ -41,7 +41,10 @@ async function getTodos() {
   try {
     // console.log("inside get todos");
     let res = await axios.get(
-      "https://jsonplaceholder.typicode.com/todos?_limit=5"
+      "https://jsonplaceholder.typicode.com/todos?_limit=5",
+      {
+        timeout: 5000,
+      }
     );
     showOutput(res);
   } catch (err) {
