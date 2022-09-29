@@ -143,12 +143,45 @@ function getData() {
 
 // CUSTOM HEADERS
 function customHeaders() {
-  console.log("Custom Headers");
+  // console.log("Custom Headers");
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "sometoken",
+    },
+  };
+
+  axios
+    .post(
+      "https://jsonplaceholder.typicode.com/todos",
+      {
+        title: "New Todo",
+        completed: false,
+      },
+      config
+    )
+    .then((res) => showOutput(res))
+    .catch((error) => console.log(error));
 }
 
 // TRANSFORMING REQUESTS & RESPONSES
 function transformResponse() {
-  console.log("Transform Response");
+  // console.log("Transform Response");
+
+  const options = {
+    method: "post",
+    url: "https://jsonplaceholder.typicode.com/todos",
+    data: {
+      title: "Hello World",
+    },
+    transformResponse: axios.defaults.transformResponse.concat((data) => {
+      data.title = data.title.toUpperCase();
+      return data;
+    }),
+  };
+
+  axios(options).then((res) => showOutput(res));
 }
 
 // ERROR HANDLING
@@ -162,12 +195,19 @@ function cancelToken() {
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
-axios.interceptors.request.use((config) => {
-  console.log(`${config.method.toUpperCase() } request send to ${config.url} at ${new Date().getTime()}`);
-  return config;
-}, error =>{
-  return Promise.reject(error)
-});
+axios.interceptors.request.use(
+  (config) => {
+    console.log(
+      `${config.method.toUpperCase()} request send to ${
+        config.url
+      } at ${new Date().getTime()}`
+    );
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // AXIOS INSTANCES
 
