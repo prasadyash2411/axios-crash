@@ -36,7 +36,9 @@ async function getTodos() {
   //   .catch((error) => console.log(error));
   try {
     console.log("inside get todos");
-    let res = await axios.get("https://jsonplaceholder.typicode.com/todos?");
+    let res = await axios.get(
+      "https://jsonplaceholder.typicode.com/todos?_limit=5"
+    );
     showOutput(res);
   } catch (err) {
     console.log(err);
