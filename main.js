@@ -35,7 +35,7 @@ async function getTodos() {
   //   .then((res) => showOutput(res))
   //   .catch((error) => console.log(error));
   try {
-    console.log("inside get todos");
+    // console.log("inside get todos");
     let res = await axios.get(
       "https://jsonplaceholder.typicode.com/todos?_limit=5"
     );
@@ -162,9 +162,12 @@ function cancelToken() {
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
-// axios.interceptors.request.use((config) => {
-//   console.log();
-// });
+axios.interceptors.request.use((config) => {
+  console.log(`${config.method.toUpperCase() } request send to ${config.url} at ${new Date().getTime()}`);
+  return config;
+}, error =>{
+  return Promise.reject(error)
+});
 
 // AXIOS INSTANCES
 
