@@ -25,10 +25,10 @@
                     email,
                     phonenumber
                 }
-                axios.post("https://crudcrud.com/api/02aa72ae6e4e42b6bf50f5e1ebfe5882/appoinment",obj)
+                axios.post("https://reqres.in/api/users",obj)
                 .then((response)=>{
                     showNewUserOnScreen(response.data);
-                    console.log(response.data);
+                    //console.log(response.data);
                 })
                 //showNewUserOnScreen(obj)
             }
@@ -36,7 +36,7 @@
             window.addEventListener("DOMContentLoaded", () => {
                 // const localStorageObj = localStorage;
                 // const localstoragekeys  = Object.keys(localStorageObj)
-                axios.get("https://crudcrud.com/api/02aa72ae6e4e42b6bf50f5e1ebfe5882/appoinment")
+                axios.get("https://reqres.in/api/users")
                 .then((response)=>{
                     //console.log(response.data);
                     for (var i=0;i<response.data.length;i++){
@@ -58,7 +58,7 @@
             function showNewUserOnScreen(user){
                 const parentNode = document.getElementById('listOfUsers');
                 const childHTML = `<li id=${user.email}> ${user.name} - ${user.email}
-                                        <button onclick=deleteUser('${user.email}')> Delete User </button>
+                                        <button onclick=deleteUser('${user.email}')> Delete User </button><button onclick=updateuser('${user.email}')>update</button>
                                      </li>`
 
                 parentNode.innerHTML = parentNode.innerHTML + childHTML;
@@ -67,10 +67,14 @@
             // deleteUser('abc@gmail.com')
 
             function deleteUser(emailId){
-                console.log(emailId)
-                localStorage.removeItem(emailId);
-                removeUserFromScreen(emailId);
+                
+                axios.delete("https://reqres.in/api/users")
+                .then((response)=>{
+                    removeUserFromScreen(emailId);
 
+
+                })
+                
             }
 
             function removeUserFromScreen(emailId){
