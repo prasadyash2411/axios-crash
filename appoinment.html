@@ -2,11 +2,11 @@
     <body>
         <form onsubmit="saveToLocalStorage(event)">
             <label> Name</label>
-            <input type="text" name="username"  required/>
+            <input type="text"id="username" name="username"  required/>
             <label> EmailId</label>
-            <input type="email" name="emailId"  required/>
+            <input type="email"id="email" name="emailId"  required/>
             <label> Phone Number</label>
-            <input type="tel" name="phonenumber" />
+            <input type="tel" id="phonenumber" name="phonenumber" />
             <button> Submit </button>
         </form>
         <ul id='listOfUsers'></ul>
@@ -21,9 +21,9 @@
                 // localStorage.setItem('email', email);
                 // localStorage.setItem('phonenumber', phonenumber)
                 const obj = {
-                    name,
-                    email,
-                    phonenumber
+                    "name":name,
+                    "email":email,
+                    "phonenumbe":phonenumber
                 }
                 axios.post("https://reqres.in/api/users",obj)
                 .then((response)=>{
@@ -58,7 +58,7 @@
             function showNewUserOnScreen(user){
                 const parentNode = document.getElementById('listOfUsers');
                 const childHTML = `<li id=${user.email}> ${user.name} - ${user.email}
-                                        <button onclick=deleteUser('${user.email}')> Delete User </button><button onclick=updateuser('${user.email}')>update</button>
+                                        <button onclick=deleteUser('${user.email}')> Delete User </button><button onclick=edit('${user.email}','${user.name}','${user.phonenumber}')>update</button>
                                      </li>`
 
                 parentNode.innerHTML = parentNode.innerHTML + childHTML;
@@ -82,6 +82,15 @@
                 const childNodeToBeDeleted = document.getElementById(emailId);
 
                 parentNode.removeChild(childNodeToBeDeleted)
+            }
+            function edit(emailId,name,email,phonenumber){
+                
+                
+                    document.getElementById("username").value=name;
+                    document.getElementById("email").value=email;
+                    document.getElementById("phonenumber").value=phonenumber;
+                    deleteUser(emailId);
+                
             }
 
 
