@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>expense tracker</h1><br>
+    <fieldset onsubmit="savetoserver(event)">
+        <legend>insert data</legend>
+        <label for="choose amount">choose amount</label><br>
+        <input type="text" name="chooseamount" id="amount" placeholder="enter amount"><br>
+        <label for="description">expense description</label><br>
+        <input type="text"name="description" id="description" placeholder="write expense description"><br>
+        <label for="expense category">expense category</label><br>
+    
+        <input list="expensetypes" name="expensetype" id="category">
+        <datalist id="expensetypes">
+          <option value="movies">
+          <option value="trips">
+          <option value="fuel">
+          <option value="billpayments">
+          <option value="grocerrys">
+        </datalist>
+        <button type="button"id="submit">submit</button>
+    
+
+
+  
+        
+           
+        
+
+    
+
+    </fieldset>
+    <ul id="new"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.min.js"></script>
+
+    <script >
+        function savetoserver(event){
+    event.preventDefault();
+    var amount=event.target.chooseamount.value;
+    var description=event.target.description.value;
+    var category=event.target.expensetype.value;
+
+    
+    const myobject={
+      amount,
+      description,
+      category,  
+    }
+    axios.post("https://crudcrud.com/api/c8429d877f734c08bd18f4074f00a17c/expense",myobject)
+    .then((response)=>{
+        showNewUserOnScreen(response.data)
+    })
+    
+    
+    
+}
+window.addEventListener("DOMContentLoaded",()=>{
+    
+    axios.get("https://crudcrud.com/api/c8429d877f734c08bd18f4074f00a17c/expense")
+    .then((response)=>{
+        for(var i=0; i<response.data.length;i++){
+            showNewUserOnScreen(response.data[i]);
+        }
+    })
+    
+        
+    
+        
+    
+})
+function showNewUserOnScreen(user){
+    const parentNode = document.getElementById('new');
+    const childHTML = `<li id=${user._id}> ${user.amount} - ${user.description}-${user.category}
+                            <button onclick=deleteUser('${user._id}')> Delete User </button><button onclick=edituser('${user._id}','${user.amount}','${user.description}','${user.category}')>edit</button>`
+
+    parentNode.innerHTML = parentNode.innerHTML + childHTML;
+}
+function deleteUser(userid){
+    axios.delete(`https://crudcrud.com/api/c8429d877f734c08bd18f4074f00a17c/expense/${userid}`)
+    .then((response)=>{
+        removeUserFromScreen(userid)
+    })
+
+}
+function removeUserFromScreen(userid){
+    const parentNode = document.getElementById("new");
+    const childNodeToBeDeleted = document.getElementById(category);
+
+    parentNode.removeChild(childNodeToBeDeleted)
+}
+function edituser(userId,amount,description,category){
+    document.getElementById("amount").value=amount;
+    document.getElementById("description").value=description;
+    document.getElementById("category").value=category;
+    deleteUser(userId);
+
+}
+
+    
+    
+       
+        
+
+    
+    
+
+    </script>
+
+</body>
+</html>
