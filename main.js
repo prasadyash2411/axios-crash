@@ -175,12 +175,12 @@ error=>{
 })
 // AXIOS INSTANCES
 
-// const axiosInstance = axios.create({
-//   //other custom settings
-//   baseURL: 'https://jsonplaceholder.typicode.com'
-// });
+const axiosInstance = axios.create({
+  //other custom settings
+  baseURL: 'https://jsonplaceholder.typicode.com'
+});
 
-// axiosInstance.get('/comments').then(res=>showOutput(res)).catch(e=>console.log(e));
+axiosInstance.get('/comments').then(res=>showOutput(res)).catch(e=>console.log(e));
 
 
 // Show output in browser
