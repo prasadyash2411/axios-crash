@@ -1,51 +1,187 @@
+//AXIOS GLOBALS
+axios.defaults.headers.common['X-Auth-Token'] ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
 // GET REQUEST
 function getTodos() {
-  console.log('GET Request');
+  // axios({
+  //   method:'get',
+  //   url:'https://jsonplaceholder.typicode.com/todos',
+  //   params:{
+  //     _limit:5
+  //   }
+  // })
+  // .then((response) => showOutput(response))
+  // .catch((err)=>console.log(err));
+  // console.log('GET Request');
+
+  ////// Shortening the above request   /////////
+
+  axios                                                                  
+  .get('https://jsonplaceholder.typicode.com/todos?_limit=5',{timeout: 2000})
+    .then((response) => showOutput(response))
+    .catch((err) => console.log(err));
+
+  //console.log('GET Request');
 }
 
-// POST REQUEST
+// POST REQUEST --  //Gives Output with new Todo and ID attached from server
 function addTodo() {
-  console.log('POST Request');
+  axios
+  .post('https://jsonplaceholder.typicode.com/todos',{title:'New Todo',completed:false})
+  .then((response) => showOutput(response))
+  .catch((err)=>console.log(err));
+
+  //console.log('POST Request');
 }
 
 // PUT/PATCH REQUEST
 function updateTodo() {
-  console.log('PUT/PATCH Request');
+  // axios
+  //   .put('https://jsonplaceholder.typicode.com/todos/1', {                                  //Needs id of ToDo to UPDATE    -- Replace Everything
+  //     title: 'Updated Todo', completed: true         //Gives Output with new Todo and ID attached from server
+  //   })
+  //   .then((response) => showOutput(response))
+  //   .catch((err) => console.log(err))
+
+  axios
+    .patch('https://jsonplaceholder.typicode.com/todos/1', {                                  //Needs id of ToDo to UPDATE    -- Replace Everything
+      title: 'Updated Todo', completed: true         //Gives Output with new Todo and ID attached from server
+    })
+    .then((response) => showOutput(response))
+    .catch((err) => console.log(err))
+
+  //console.log('PUT/PATCH Request');
 }
 
 // DELETE REQUEST
 function removeTodo() {
-  console.log('DELETE Request');
+
+  axios
+    .delete('https://jsonplaceholder.typicode.com/todos/1')
+    .then((response) => showOutput(response))
+    .catch((err) => console.log(err))
+
+  //console.log('DELETE Request');
 }
 
 // SIMULTANEOUS DATA
 function getData() {
-  console.log('Simultaneous Request');
+
+  axios.all([
+    axios.get('https://jsonplaceholder.typicode.com/todos'),
+    axios.get('https://jsonplaceholder.typicode.com/posts?_limit=5')
+  ]).then(axios.spread((todos,posts)=>showOutput(posts)))     //gives ability to give Var names to axios.all array Promise outputs
+  .catch((err)=>console.error(err));
+  
+  //console.log('Simultaneous Request');
 }
 
 // CUSTOM HEADERS
 function customHeaders() {
-  console.log('Custom Headers');
+  const config={
+    headers:{
+      'Content-Type':'application/json',
+      Authorization:'someJWTtoken'
+    }
+  }
+
+  axios
+    .post('https://jsonplaceholder.typicode.com/todos', {
+      title: 'New Todo', completed: false                   //Gives Output with new Todo and ID attached from server
+    },config
+    )
+    .then((response) => showOutput(response))
+    .catch((err) => console.log(err))
 }
 
 // TRANSFORMING REQUESTS & RESPONSES
 function transformResponse() {
-  console.log('Transform Response');
+  const options ={
+    method:'post',
+    url:'https://jsonplaceholder.typicode.com/todos',
+    data:{
+      title:'Hello World'
+    },
+    transformResponse: axios.defaults.transformResponse.concat(data=>{
+      data.title=data.title.toUpperCase();
+      return data;
+    })
+
+  }
+  axios(options).then(res=>showOutput(res));              //Making axios request with options object holding method url data etc
+  
+  //console.log('Transform Response');
 }
 
 // ERROR HANDLING
 function errorHandling() {
-  console.log('Error Handling');
+  axios                                                                     //or axios('https://jsonplaceholder.typicode.com/todoss')
+    .get('https://jsonplaceholder.typicode.com/todoss',{
+      // validateStatus: function(status){
+      //   return status<500;    //Reject only if Status>=500
+      // }
+    })
+    .then((response) => showOutput(response))
+    .catch((err) => {
+      if(err.response){
+        //Server response status 200
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+
+        if(err.response.status==404){
+          alert("Error: Page Not found");
+        }
+        else if(err.request){
+          //Request was made but there's no response
+          console.error(err.request);
+        }
+        else{
+          console.error(err.message);
+        }
+      }
+    });
+
+  //console.log('Error Handling');
 }
 
 // CANCEL TOKEN
 function cancelToken() {
-  console.log('Cancel Token');
+  const source = axios.CancelToken.source();
+  axios                                                                     //or axios.get
+    .get('https://jsonplaceholder.typicode.com/todos',{
+      cancelToken: source.token
+    })
+    .then((response) => showOutput(response))
+    .catch(thrown=>{
+      if(axios.isCancel(thrown)){
+        console.log('Request Canceled',thrown.message)
+      }
+    });
+    if(true){
+      source.cancel('Request Cancelled!')
+    }
+
+  //console.log('Cancel Token');
 }
 
-// INTERCEPTING REQUESTS & RESPONSES
-
+// INTERCEPTING REQUESTS & RESPONSES -- To Track/intercept requests - Log type URL and Time when the request was made
+axios.interceptors.request.use(config=>{
+  console.log(`${config.method.toUpperCase()} request sent to ${config.url} at ${new Date().getTime()}`);
+  return config;
+},
+error=>{
+  return Promise.reject(error);
+})
 // AXIOS INSTANCES
+
+const axiosInstance = axios.create({
+  //other custom settings
+  baseURL: 'https://jsonplaceholder.typicode.com'
+});
+
+axiosInstance.get('/comments').then(res=>showOutput(res)).catch(e=>console.log(e));
+
 
 // Show output in browser
 function showOutput(res) {
